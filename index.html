@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Cost Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>โปรแกรมคำนวณค่าบริการสิ่งของรั่วไหล ศูนย์ไปรษณีย์อุดรธานี 41010</h1>
+    <h2>จัดทำโดย นายพงศกร ตะไก่แก้ว</h2>
+    <form id="serviceForm">
+        <div id="serviceButtons">
+            <div class="service-button" data-service="EMS">EMS</div>
+            <div class="service-button" data-service="ECO">ECO POST</div>
+            <div class="service-button" data-service="PA">พัสดุ</div>
+        </div>
+        <input type="hidden" id="serviceType" name="serviceType">
+        <label for="weight">น้ำหนัก (กิโลกรัม):</label>
+        <input type="number" id="weight" name="weight" step="0.01" required>
+
+        <label for="width">กว้าง (เซนติเมตร):</label>
+        <input type="number" id="width" step="0.01" required>
+        
+        <label for="length">ยาว (เซนติเมตร):</label>
+        <input type="number" id="length" step="0.01" required>
+
+        <label for="height">สูง (เซนติเมตร):</label>
+        <input type="number" id="height" step="0.01" required>
+        
+        <button type="button" onclick="calculateCost()">คำนวณ</button>
+    </form>
+
+    <div class="results">
+        <h2>ค่าบริการตามน้ำหนัก: <span id="actualCost"></span></h2>
+        <h2>ค่าบริการเชิงปริมาตร: <span id="dimensionalCost"></span></h2>
+        <h3>น้ำหนักเชิงปริมาตร: <span id="dimensionalWeight"></span></h3>
+        <h4>ค่าบริการที่ต้องเรียกเก็บเพิ่ม: <span id="additionalCost"></span></h4>
+    </div>
+    <h3 id="sizeLimitMessage"></h3>
+
+    <script src="script1.js"></script>
+    <script>
+        // JavaScript to handle service button selection
+        document.querySelectorAll('.service-button').forEach(button => {
+            button.addEventListener('click', function () {
+                document.querySelectorAll('.service-button').forEach(btn => btn.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('serviceType').value = this.getAttribute('data-service');
+            });
+        });
+    </script>
+</body>
+</html>
