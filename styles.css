@@ -1,16 +1,16 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
+    padding: 10px;
+    background-color: #ffffff;
     color: #333;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 h1, h2, h3, h4 {
     margin: 0 0 10px 0;
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 form {
@@ -27,16 +27,16 @@ label {
 input[type="number"] {
     width: calc(100% - 20px);
     padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    border: 1px solid #e80b0b;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 10px;
 }
 
 button {
     width: 100%;
     padding: 15px;
-    background-color: #007bff;
+    background-color: #fd0404;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -46,7 +46,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #fd0404;
 }
 
 .results h2, .results h3, .results h4 {
