@@ -153,13 +153,13 @@ function calculateCost() {
 
     // Check dimensions limits
     if (serviceType === "EMS" && (length + width + height > 240.01|| length > 120.01)) {
-        sizeLimitMessage = "ไม่สามารถส่ง EMS ขนาดใหญ่ได้ เนื่องจากขนาดเกินกำหนด";
+        sizeLimitMessage = "ไม่สามารถส่ง EMS ขนาดใหญ่ได้ เนื่องจากยาวเกิน 120 ซม. แนะนำให้ส่งด้วยบริการ EMS JUMBO แทน";
         useDimensionalCost = true;
     } else if (serviceType === "ECO" && (length + width + height > 120.01 || length > 60.01 || width > 60.01 || height > 60.01)) {
-        sizeLimitMessage = "ไม่สามารถส่ง ECO POST ได้ เนื่องจากขนาดเกินกำหนด";
+        sizeLimitMessage = "ไม่สามารถส่ง ECO POST ได้ เนื่องจากมีความยาวหรือกว้างหรือสูง เกิน 60 ซม. แนะนำให้ส่งด้วยบริการอื่น";
         useDimensionalCost = true;
     } else if (serviceType === "PA" && (length + 2 * width + 2 * height > 300 || length > 150.01 || width > 150.01 || height > 150.01)) {
-        sizeLimitMessage = "ไม่สามารถส่งพัสดุได้ เนื่องจากขนาดเกินกำหนด";
+        sizeLimitMessage = "ไม่สามารถส่งพัสดุได้ เนื่องจากมีความยาวหรือกว้างหรือสูง เกิน 150 ซม. แนะนำให้ส่งด้วยบริการอื่น";
         useDimensionalCost = true;
     }
 
