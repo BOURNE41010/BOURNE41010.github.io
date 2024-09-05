@@ -152,7 +152,7 @@ function calculateCost() {
     }
 
     // Check dimensions limits
-    if (serviceType === "EMS" && (length + width + height > 240.01)) {
+    if (serviceType === "EMS" && (length + width + height > 240.01|| length > 120.01)) {
         sizeLimitMessage = "ไม่สามารถส่ง EMS ขนาดใหญ่ได้ เนื่องจากขนาดเกินกำหนด";
         useDimensionalCost = true;
     } else if (serviceType === "ECO" && (length + width + height > 120.01 || length > 60.01 || width > 60.01 || height > 60.01)) {
