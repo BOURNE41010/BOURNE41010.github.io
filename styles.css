@@ -1,13 +1,14 @@
+/* ตั้งค่าพื้นฐานสำหรับหน้าจอโทรศัพท์ */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 10px;
     background-color: #f4f4f4;
     color: #333;
 }
 
 h1, h2, h3, h4 {
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
     text-align: center;
 }
 
@@ -18,27 +19,27 @@ form {
 
 label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
 input[type="number"] {
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 button {
     width: 100%;
-    padding: 15px;
+    padding: 12px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -50,23 +51,24 @@ button:hover {
 .results h2, .results h3, .results h4 {
     display: flex;
     justify-content: space-between;
-    margin: 15px 0;
+    margin: 10px 0;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
+    font-size: 14px;
 }
 
 #serviceButtons {
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
 .service-button {
-    flex: 1;
-    padding: 15px;
-    margin: 0 5px;
+    width: 100%;
+    padding: 12px;
     text-align: center;
     background-color: #f8f9fa;
     border: 2px solid #007bff;
@@ -87,6 +89,22 @@ button:hover {
 
 #sizeLimitMessage {
     color: red;
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
+}
+
+/* ปรับให้พอดีกับหน้าจอ Samsung S22 Ultra */
+@media only screen and (max-width: 1440px) {
+    body {
+        padding: 10px;
+    }
+    
+    input[type="number"], button, .service-button {
+        font-size: 14px;
+    }
+
+    .results h2, .results h3, .results h4 {
+        font-size: 13px;
+        padding: 8px;
+    }
 }
