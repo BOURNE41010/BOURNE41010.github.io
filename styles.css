@@ -55,6 +55,7 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
+    font-size: 15px;
 }
 
 #serviceButtons {
