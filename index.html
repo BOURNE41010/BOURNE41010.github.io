@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    
     <h1>โปรแกรมคำนวณค่าบริการสิ่งของรั่วไหล ศูนย์ไปรษณีย์อุดรธานี 41010</h1>
     <h2>จัดทำโดย นายพงศกร ตะไก่แก้ว</h2>
     <form id="serviceForm">
@@ -49,6 +50,16 @@
                 document.getElementById('serviceType').value = this.getAttribute('data-service');
             });
         });
+    </script>
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="refreshButton" onclick="refreshPage()" style="padding: 10px 20px; font-size: 14px;">รีเฟรชหน้า</button>
+    </div>
+
+    <!-- ลิงก์ JS -->
+    <script>
+        function refreshPage() {
+            location.reload();
+        }
     </script>
 </body>
 </html>
