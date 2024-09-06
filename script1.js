@@ -109,6 +109,9 @@ document.querySelectorAll('.service-button').forEach(button => {
     });
 });
 
+function refreshPage() {
+    location.reload();
+}
 
 function calculateCost() {
     const serviceType = document.getElementById("serviceType").value;
