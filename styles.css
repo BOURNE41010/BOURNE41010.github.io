@@ -35,12 +35,12 @@ input[type="number"] {
 
 button {
     width: 100%;
-    padding: 14px;
+    padding: 10px 20px;
     background-color: #ff0404;
     color: #fff;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -68,7 +68,7 @@ button:hover {
 
 .service-button {
     flex: 1;
-    padding: 14px;
+    padding: 10px;
     margin: 0 2px;
     text-align: center;
     background-color: #f8f9fa;
@@ -90,6 +90,20 @@ button:hover {
 
 #sizeLimitMessage {
     color: red;
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
+}
+#refreshButton {
+    background-color: #4CAF50; /* สีพื้นหลัง */
+    color: white; /* สีข้อความ */
+    border: none; /* ไม่มีเส้นขอบ */
+    padding: 10px 20px; /* ระยะห่างภายในปุ่ม */
+    text-align: center; /* จัดข้อความให้อยู่กลาง */
+    font-size: 16px; /* ขนาดข้อความ */
+    cursor: pointer; /* เปลี่ยนเมาส์เป็นรูปมือ */
+    border-radius: 5px; /* มุมโค้ง */
+}
+
+#refreshButton:hover {
+    background-color: #45a049; /* สีเมื่อเมาส์อยู่เหนือปุ่ม */
 }
