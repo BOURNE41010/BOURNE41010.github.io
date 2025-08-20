@@ -1,65 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <base target="_top">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Cost Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>PSO Route Optimizer</title>
+    <!--  ดึงฟอนต์และไอคอนจากภายนอก -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- ส่วนนี้จะถูกแทนที่ด้วยเนื้อหาจากไฟล์ stylesheet.html -->
+    <?!= include('stylesheet'); ?>
 </head>
 <body>
-    
-    <h1>โปรแกรมคำนวณค่าบริการสิ่งของรั่วไหล ศูนย์ไปรษณีย์อุดรธานี 41010</h1>
-    <h2>จัดทำโดย นายพงศกร ตะไก่แก้ว</h2>
-    <form id="serviceForm">
-        <div id="serviceButtons">
-            <div class="service-button" data-service="EMS">EMS</div>
-            <div class="service-button" data-service="ECO">ECO POST</div>
-            <div class="service-button" data-service="PA">พัสดุ</div>
-        </div>
-        <input type="hidden" id="serviceType" name="serviceType">
-        <label for="weight">น้ำหนัก (กิโลกรัม):</label>
-        <input type="number" id="weight" name="weight" step="0.01" required>
+    <div class="container">
+        <!-- ส่วนหัวของแอปพลิเคชัน -->
+        <header class="app-header">
+            <div class="header-icon"><i class="fas fa-route"></i></div>
+            <div class="header-text">
+                <h1>PSO Route Optimizer</h1>
+                <p>การหาเส้นทางที่ดีที่สุดด้วย Particle Swarm Optimization</p>
+            </div>
+        </header>
 
-        <label for="width">กว้าง (เซนติเมตร):</label>
-        <input type="number" id="width" step="0.01" required>
-        
-        <label for="length">ยาว (เซนติเมตร):</label>
-        <input type="number" id="length" step="0.01" required>
+        <!-- ส่วนหลักของแอปพลิเคชัน -->
+        <main class="app-main">
+            <!-- แผงควบคุมการตั้งค่า -->
+            <div class="controls-panel card">
+                <h2 class="card-header">
+                    <i class="fas fa-sliders"></i> การตั้งค่า (Parameters)
+                </h2>
+                <div class="card-body">
+                    <div class="control-group">
+                        <label for="populationSize">จำนวนอนุภาค (Population)</label>
+                        <input type="number" id="populationSize" value="30" min="10" max="200" step="10">
+                    </div>
 
-        <label for="height">สูง (เซนติเมตร):</label>
-        <input type="number" id="height" step="0.01" required>
-        
-        <button type="button" onclick="calculateCost()">คำนวณ</button>
-    </form>
+                    <div class="control-group">
+                        <label for="maxIterations">จำนวนรอบสูงสุด (Iterations)</label>
+                        <input type="number" id="maxIterations" value="100" min="50" max="1000" step="50">
+                    </div>
 
-    <div class="results">
-        <h2>ค่าบริการตามน้ำหนัก: <span id="actualCost"></span></h2>
-        <h2>ค่าบริการเชิงปริมาตร: <span id="dimensionalCost"></span></h2>
-        <h3>น้ำหนักเชิงปริมาตร: <span id="dimensionalWeight"></span></h3>
-        <h4>ค่าบริการที่ต้องเรียกเก็บเพิ่ม: <span id="additionalCost"></span></h4>
+                    <div class="control-group">
+                        <label for="inertiaWeight">Inertia Weight (w)</label>
+                        <input type="number" id="inertiaWeight" value="0.8" min="0.1" max="1.5" step="0.1">
+                    </div>
+                </div>
+                <div class="card-footer">
+                     <button id="startBtn" class="btn btn-primary">
+                        <i class="fas fa-play"></i> เริ่มคำนวณ
+                    </button>
+                    <button id="clearBtn" class="btn btn-secondary">
+                        <i class="fas fa-eraser"></i> ล้างข้อมูล
+                    </button>
+                </div>
+            </div>
+
+            <!-- แผงแสดงผลลัพธ์ -->
+            <div class="results-panel">
+                <h2 class="panel-header">
+                   <i class="fas fa-chart-line"></i> ผลลัพธ์การคำนวณ
+                </h2>
+
+                <!-- การ์ดแสดงผลลัพธ์หลัก -->
+                <div id="results-summary" class="results-grid hidden">
+                    <div class="result-card card">
+                        <h3><i class="fas fa-map-signs"></i> เส้นทางที่ดีที่สุด</h3>
+                        <p id="bestRouteText">-</p>
+                    </div>
+
+                    <div class="result-card card">
+                        <h3><i class="fas fa-road"></i> ระยะทางรวม</h3>
+                        <p id="totalDistanceText">- km</p>
+                    </div>
+
+                    <div class="result-card card">
+                        <h3><i class="fas fa-stopwatch"></i> จำนวนรอบ</h3>
+                        <p id="iterationsUsedText">-</p>
+                    </div>
+                </div>
+
+                <!-- สถานะการโหลด -->
+                <div id="loadingIndicator" class="loading-container hidden">
+                    <div class="spinner"></div>
+                    <p>กำลังคำนวณเส้นทางที่ดีที่สุด...</p>
+                </div>
+
+                <!-- ตารางประวัติการคำนวณ -->
+                <div id="historyContainer" class="history-container card hidden">
+                     <h3 class="card-header"><i class="fas fa-history"></i> ประวัติการปรับปรุงค่า</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>รอบที่</th>
+                                    <th>ระยะทางที่ดีที่สุด (km)</th>
+                                    <th>ระยะทางเฉลี่ย (km)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody">
+                                <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                 <!-- ข้อความเริ่มต้น -->
+                <div id="initialMessage" class="initial-message card">
+                    <i class="fas fa-info-circle"></i>
+                    <p>กรุณาตั้งค่าพารามิเตอร์และกด "เริ่มคำนวณ" เพื่อค้นหาเส้นทาง</p>
+                </div>
+
+            </div>
+        </main>
     </div>
-    <h3 id="sizeLimitMessage"></h3>
 
-    <script src="script1.js"></script>
-    <script>
-        // JavaScript to handle service button selection
-        document.querySelectorAll('.service-button').forEach(button => {
-            button.addEventListener('click', function () {
-                document.querySelectorAll('.service-button').forEach(btn => btn.classList.remove('selected'));
-                this.classList.add('selected');
-                document.getElementById('serviceType').value = this.getAttribute('data-service');
-            });
-        });
-    </script>
-    <div style="text-align: center; margin-top: 20px;">
-        <button id="refreshButton" onclick="refreshPage()" style="padding: 10px 20px; font-size: 14px;">รีเฟรชหน้า</button>
-    </div>
-
-    <!-- ลิงก์ JS -->
-    <script>
-        function refreshPage() {
-            location.reload();
-        }
-    </script>
+    <!-- ส่วนนี้จะถูกแทนที่ด้วยเนื้อหาจากไฟล์ javascript.html -->
+    <?!= include('javascript'); ?>
 </body>
 </html>

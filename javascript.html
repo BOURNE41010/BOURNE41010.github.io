@@ -1,0 +1,141 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- DOM Element References ---
+    const startBtn = document.getElementById('startBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const populationSizeInput = document.getElementById('populationSize');
+    const maxIterationsInput = document.getElementById('maxIterations');
+    const inertiaWeightInput = document.getElementById('inertiaWeight');
+
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const initialMessage = document.getElementById('initialMessage');
+    const resultsSummary = document.getElementById('results-summary');
+    const historyContainer = document.getElementById('historyContainer');
+
+    const bestRouteText = document.getElementById('bestRouteText');
+    const totalDistanceText = document.getElementById('totalDistanceText');
+    const iterationsUsedText = document.getElementById('iterationsUsedText');
+    const historyBody = document.getElementById('historyBody');
+
+    // --- Event Listeners ---
+    startBtn.addEventListener('click', handleStartOptimization);
+    clearBtn.addEventListener('click', handleClearResults);
+
+    /**
+     * Handles the start button click event.
+     * Gathers parameters and calls the server-side PSO function.
+     */
+    function handleStartOptimization() {
+        // 1. Get parameters from input fields
+        const params = {
+            populationSize: populationSizeInput.value,
+            maxIterations: maxIterationsInput.value,
+            inertiaWeight: inertiaWeightInput.value
+        };
+
+        // 2. Update UI to show loading state
+        setLoadingState(true);
+
+        // 3. Call server-side function
+        google.script.run
+            .withSuccessHandler(onOptimizationSuccess)
+            .withFailureHandler(onOptimizationFailure)
+            .runPSOOptimization(params);
+    }
+
+    /**
+     * Handles the clear button click event.
+     * Resets the UI to its initial state.
+     */
+    function handleClearResults() {
+        resultsSummary.classList.add('hidden');
+        historyContainer.classList.add('hidden');
+        initialMessage.classList.remove('hidden');
+
+        bestRouteText.textContent = '-';
+        totalDistanceText.textContent = '- km';
+        iterationsUsedText.textContent = '-';
+        historyBody.innerHTML = '';
+    }
+
+    /**
+     * Callback function for successful optimization.
+     * @param {object} result The result object from the server.
+     */
+    function onOptimizationSuccess(result) {
+        setLoadingState(false);
+
+        if (result && result.success) {
+            // Update result cards
+            bestRouteText.textContent = result.routeString || '-';
+            totalDistanceText.textContent = `${result.bestDistance.toFixed(2)} km`;
+            iterationsUsedText.textContent = `${result.iterations} รอบ`;
+
+            // Populate history table
+            populateHistoryTable(result.history || []);
+
+            // Show result sections
+            resultsSummary.classList.remove('hidden');
+            historyContainer.classList.remove('hidden');
+        } else {
+            // Handle cases where the script runs but returns an error
+            onOptimizationFailure(new Error(result.error || 'เกิดข้อผิดพลาดที่ไม่รู้จัก'));
+        }
+    }
+
+    /**
+     * Callback function for failed optimization.
+     * @param {Error} error The error object.
+     */
+    function onOptimizationFailure(error) {
+        setLoadingState(false);
+        alert('เกิดข้อผิดพลาดในการคำนวณ: ' + error.message);
+    }
+
+    /**
+     * Populates the history table with iteration data.
+     * @param {Array<object>} history The history array from the result.
+     */
+    function populateHistoryTable(history) {
+        historyBody.innerHTML = ''; // Clear previous data
+        if (!history || history.length === 0) return;
+
+        // To avoid showing too many rows, we can show a subset
+        const displayHistory = history.length > 50
+            ? history.filter((_, index) => index % Math.ceil(history.length / 50) === 0)
+            : history;
+
+        displayHistory.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.iteration}</td>
+                <td>${item.bestFitness.toFixed(2)}</td>
+                <td>${item.averageFitness.toFixed(2)}</td>
+            `;
+            historyBody.appendChild(row);
+        });
+    }
+
+    /**
+     * Toggles the UI between loading and idle states.
+     * @param {boolean} isLoading True to show loading, false to hide.
+     */
+    function setLoadingState(isLoading) {
+        if (isLoading) {
+            startBtn.disabled = true;
+            clearBtn.disabled = true;
+            startBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังคำนวณ...';
+            loadingIndicator.classList.remove('hidden');
+            initialMessage.classList.add('hidden');
+            resultsSummary.classList.add('hidden');
+            historyContainer.classList.add('hidden');
+        } else {
+            startBtn.disabled = false;
+            clearBtn.disabled = false;
+            startBtn.innerHTML = '<i class="fas fa-play"></i> เริ่มคำนวณ';
+            loadingIndicator.classList.add('hidden');
+        }
+    }
+
+});
+</script>
